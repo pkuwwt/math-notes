@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous"> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script> 
+ <script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
+<script> 
+var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bR:'mathbb{R}', bZ:'mathbb{Z}'}; 
+var replace_tex_alias = function(text) {
+	for(var key in tex_alias) {
+		console.log(text);
+		text = text.replace(new RegExp('\\\\'+key, 'g'), '\\'+tex_alias[key]);
+		console.log(text);
+	}
+	return text;
+};
+window.onload = function() { 
+$("script[type='math/tex']").replaceWith(function() { 
+	var tex = $(this).text(); 
+	tex = replace_tex_alias(tex); 
+	return katex.renderToString(tex, {displayMode: false}); 
+}); 
+$("script[type='math/tex; mode=display']").replaceWith(function() { 
+	var mode = $(this).parent()[0].nodeName.toLowerCase()!="li"; 
+	var html = $(this).html(); 
+	html = replace_tex_alias(html); 
+	return katex.renderToString(html.replace(/%.*/g, ''), {displayMode: mode}); 
+}); 
+}; 
+</script> 
+</head>
+<body>
+<h1 id="matrix-calculus">Matrix Calculus</h1>
+
+<p><a href="">http://www.psi.toronto.edu/matrix/calculus.html</a></p>
+
+<h2 id="notation">Notation</h2>
+
+<ul>
+  <li><script type="math/tex">d/dx(\mathbf{y})</script> is a vector whose <script type="math/tex">i</script>-element is <script type="math/tex">d\mathbf{y}_i/dx</script></li>
+  <li><script type="math/tex">d/d\mathbf{x}</script> is a vector whose <script type="math/tex">i</script>-element is <script type="math/tex">dy/d\mathbf{x}_i</script></li>
+  <li><script type="math/tex">d/d\mathbf{x}(\mathbf{y}^T)</script> is a matrix whose <script type="math/tex">(i,j)</script>-element is <script type="math/tex">d\mathbf{y}_j/d\mathbf{x}_i</script></li>
+  <li><script type="math/tex">d/dx(\mathbf{Y})</script> is a matrix whose <script type="math/tex">(i,j)</script>-element is <script type="math/tex">d\mathbf{Y}_{ij}/dx</script></li>
+  <li><script type="math/tex">d/d\mathbf{X}(y)</script> is a matrix whose <script type="math/tex">(i,j)</script>-element is <script type="math/tex">dy/d\mathbf{X}_{ij}</script></li>
+</ul>
+
+<p>Note that the Hermitan transpose is not used because complex conjugates are not analytic.</p>
+
+<p>In the expressions below matrices and vectors <script type="math/tex">A,B,C</script> do not depend on <script type="math/tex">X</script>.</p>
+
+<h2 id="derivatives-of-linear-products">Derivatives of Linear Products</h2>
+
+<ul>
+  <li>
+    <script type="math/tex; mode=display">d/dx(A\mathbf{Y}B) = A*d/dx(\mathbf{Y}) * B</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/d\mathbf{x}(A\mathbf{y}) = A*d/d\mathbf{x}(\mathbf{y})</script>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/dx(\mathbf{x}^TA)=A</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/d\mathbf{x}(\mathbf{x}^T)=I</script>
+      </li>
+      <li>
+        <script type="math/tex; mode=display">d/d\mathbf{x}(\mathbf{x}^T\mathbf{a})=d/d\mathbf{x}(\mathbf{a}^T\mathbf{x})=\mathbf{a}</script>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\mathbf{X}(\mathbf{a}^T\mathbf{X}\mathbf{b})=\mathbf{a}\mathbf{b}^T</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/d\mathbf{X}(\mathbf{a}^T\mathbf{X}\mathbf{a})=\mathbf{a}\mathbf{a}^T</script>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\mathbf{X}(\mathbf{a}^T\mathbf{X}^T\mathbf{b})=\mathbf{b}\mathbf{a}^T</script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/dx(\mathbf{Y}\mathbf{Z})=\mathbf{Y}*d/dx(\mathbf{Z})+d/dx(\mathbf{Y})*\mathbf{Z}</script>
+  </li>
+</ul>
+
+<h2 id="derivatives-of-quadratic-products">Derivatives of Quadratic Products</h2>
+
+<ul>
+  <li>
+    <script type="math/tex; mode=display">d/d\Bx(A\Bx+\Bb)^TC(D\Bx+\Be)=A^TC(D\Bx+\Be)+D^TC^T(A\Bx+\Bb)</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/d\Bx(\Bx^TC\Bx)=(C+C^T)\Bx</script>
+        <ul>
+          <li>Symmetric <script type="math/tex">C</script>: <script type="math/tex">d/d\Bx(\Bx^TC\Bx)=2C\Bx</script></li>
+          <li>
+            <script type="math/tex; mode=display">d/d\Bx(\Bx^T\Bx)=2\Bx</script>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <script type="math/tex; mode=display">d/d\Bx(A\Bx+\Bb)^T(D\Bx+\Be)=A^T(D\Bx+\Be)+D^T(A\Bx+\Bb)</script>
+        <ul>
+          <li>
+            <script type="math/tex; mode=display">d/d\Bx(A\Bx+\Bb)^T(A\Bx+\Bb)=2A^T(A\Bx+\Bb)</script>
+          </li>
+        </ul>
+      </li>
+      <li>Symmetric <script type="math/tex">C</script>: <script type="math/tex">d/d\Bx(A\Bx+\Bb)^TC(A\Bx+\Bb)=2A^TC(A\Bx+\Bb)</script></li>
+    </ul>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(\Ba^T\BX^T\BX\Bb)= \BX(\Ba\Bb^T+\Bb\Ba^T)</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/d\BX(\Ba^T\BX^T\BX\Ba)=2\BX\Ba\Ba^T</script>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(\Ba^T\BX^TC\BX\Bb)=C^T\BX\Ba\Bb^T+C\BX\Bb\Ba^T</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/d\BX(\Ba^T\BX^TC\BX\Ba)=(C+C^T)\BX\Ba\Ba^T</script>
+      </li>
+      <li>Symmetric <script type="math/tex">C</script>: <script type="math/tex">d/d\BX(\Ba^T\BX^TC\BX\Ba)=2C\BX\Ba\Ba^T</script></li>
+    </ul>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(\BX\Ba+\Bb)^TC(\BX\Ba+\Bb) = (C+C^T)(\BX\Ba+\Bb)\Ba^T</script>
+  </li>
+</ul>
+
+<h2 id="derivatives-of-cubic-products">Derivatives of Cubic Products</h2>
+
+<ul>
+  <li>
+    <script type="math/tex; mode=display">d/d\Bx(\Bx^TA\Bx\Bx^T)=(A+A^T)\Bx\Bx^T+\Bx^TA\Bx I</script>
+  </li>
+</ul>
+
+<h2 id="derivatives-of-inverses">Derivatives of Inverses</h2>
+
+<ul>
+  <li>
+    <script type="math/tex; mode=display">d/dx(\BY^{-1})=-\BY^{-1}d/dx(\BY)\BY^{-1}</script>
+  </li>
+</ul>
+
+<h2 id="derivatives-of-trace">Derivatives of Trace</h2>
+
+<ul>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(tr(\BX))=I</script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(tr(\BX^k))=k(\BX^{k-1})^T</script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(tr(A\BX^k))=\sum_{r=0}^{k-1}(\BX^rA\BX^{k-r-1})^T</script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(tr(A\BX^{-1}B))=-(\BX^{-1}BA\BX^{-1})^T</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/d\BX(tr(A\BX^{-1}))=d/d\BX(tr(\BX^{-1}A))=-\BX^{-T}A^T\BX^{-T}</script>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(tr(A^T\BX B^T))=d/d\BX(tr(B\BX^TA))=AB</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/d\BX(tr(\BX A^T))=d/d\BX(tr(A^T\BX))=d/d\BX(tr(\BX^TA))=d/d\BX(tr(A\BX^T))=A</script>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(tr(A\BX B\BX^T))=A^T\BX B^T+A\BX B</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/d\BX(tr(\BX A\BX^T))=\BX(A+A^T)</script>
+      </li>
+      <li>
+        <script type="math/tex; mode=display">d/d\BX(tr(\BX^T A\BX))=\BX^T(A+A^T)</script>
+      </li>
+      <li>
+        <script type="math/tex; mode=display">d/d\BX(tr(A\BX^T\BX))=(A+A^T)\BX</script>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(tr(A\BXB\BX))=A^T\BX^TB^T + B^T\BX^TA^T</script>
+  </li>
+  <li>Symmetric <script type="math/tex">C</script>: <script type="math/tex">d/d\BX(tr((\BX^TC\BX)^{-1}A))=d/d\BX(tr(A(\BX^TC\BX)^{-1}))=-(C\BX(\BX^TC\BX)^{-1})(A+A^T)(\BX^TC\BX)^{-1}</script></li>
+  <li>Symmetric <script type="math/tex">B,C</script>: <script type="math/tex">d/d\BX (tr((\BX^TC\BX)^{-1}(\BX^TB\BX))) = d/d\BX (tr((\BX^TB\BX)(\BX^TC\BX)^{-1})) = -2(C\BX(\BX^TC\BX)^{-1})\BX^TB\BX(\BX^TC\BX)^{-1} + 2B\BX(\BX^TC\BX)^{-1}</script></li>
+</ul>
+
+<h2 id="derivatives-of-determinant">Derivatives of Determinant</h2>
+
+<ul>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(\det(\BX))=d/d\BX(\det(\BX^T))=\det(\BX)*\BX^{-T}</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/d\BX(\det(A\BXB))=\det(A\BXB)*\BX^{-T}</script>
+      </li>
+      <li>
+        <script type="math/tex; mode=display">d/d\BX(\ln\det(A\BXB))=\BX^{-T}</script>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">d/d\BX(\det(\BX^k)) = k*\det(\BX^k)*\BX^{-T}</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">d/dX(\ln\det(\BX^k))=k\BX^{-T}</script>
+      </li>
+    </ul>
+  </li>
+  <li>Real: <script type="math/tex">d/d\BX(\det(\BX^TC\BX))=\det(\BX^TC\BX)*(C+C^T)\BX(\BX^TC\BX)^{-1}</script>
+    <ul>
+      <li>Real Symmetric <script type="math/tex">C</script>: <script type="math/tex">d/d\BX(\det(\BX^TC\BX))=2\det(\BX^TC\BX)*C\BX(\BX^TC\BX)^{-1}</script></li>
+    </ul>
+  </li>
+  <li>Real Symmetric <script type="math/tex">C</script>: <script type="math/tex">d/d\BX(\ln\det(\BX^TC\BX))=2C\BX(\BX^TC\BX)^{-1}</script></li>
+</ul>
+
+<h2 id="jacobian">Jacobian</h2>
+
+<ul>
+  <li>Jacobian matrix of <script type="math/tex">\By</script> respect to <script type="math/tex">\Bx</script>: <script type="math/tex">d\By^T/d\Bx</script></li>
+  <li>The abosolute value of determinant of Jacobian is the ratio between the volume of hyper-volumes <script type="math/tex">d\By</script> and <script type="math/tex">d\Bx</script>: <script type="math/tex">\int f(\By)d\By = \int f(\By(\Bx))\Vert d\By^T/d\Bx\Vert d\Bx</script></li>
+</ul>
+
+<h2 id="hessian-matrix">Hessian matrix</h2>
+<ul>
+  <li>Hessian matrix of <script type="math/tex">f(\Bx)</script>: <script type="math/tex">Hf(\Bx)=d^2f/d\Bx^2=d/d\Bx^T(df(d\Bx)</script></li>
+  <li>Hessian matrix <script type="math/tex">Hf(\Bx)=\mathbf{0}</script> means <script type="math/tex">\Bx</script> is a critical point, and Hessian being positive definite, negative definite or indefinite corresponds to minimum, maximum or saddle point accordingly</li>
+  <li>
+    <script type="math/tex; mode=display">H(\Ba^T\Bx)=0</script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">H(A\Bx+\Bb)^TC(D\Bx+\Be)=A^TCD+D^TC^TA</script>
+    <ul>
+      <li>
+        <script type="math/tex; mode=display">H(\Bx^TC\Bx)=C+C^T</script>
+        <ul>
+          <li>
+            <script type="math/tex; mode=display">H(\Bx^T\Bx)=2I</script>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <script type="math/tex; mode=display">H(A\Bx+\Bb)^T(D\Bx+\Be)=A^TD+D^TA</script>
+        <ul>
+          <li>
+            <script type="math/tex; mode=display">H(A\Bx+\Bb)^T(A\Bx+\Bb)=2A^TA</script>
+          </li>
+        </ul>
+      </li>
+      <li>Symmetric <script type="math/tex">C</script>: <script type="math/tex">H(A\Bx+\Bb)^TC(A\Bx+\Bb)=2A^TCA</script></li>
+    </ul>
+  </li>
+</ul>
+
+</body>
+</html>
