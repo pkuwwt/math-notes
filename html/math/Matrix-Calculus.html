@@ -5,7 +5,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script> 
  <script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
 <script> 
-var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bR:'mathbb{R}', bZ:'mathbb{Z}'}; 
+var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bw:'mathbf{w}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bR:'mathbb{R}', bZ:'mathbb{Z}'}; 
 var replace_tex_alias = function(text) {
 	for(var key in tex_alias) {
 		console.log(text);
@@ -267,5 +267,43 @@ $("script[type='math/tex; mode=display']").replaceWith(function() {
   </li>
 </ul>
 
+<h2 id="applications">Applications</h2>
+
+<h3 id="least-square-regression">Least Square Regression</h3>
+<p>For <script type="math/tex">m</script> random sample <script type="math/tex">\Bx_i\in\bR^n,i=0,1,\cdots,m-1</script> and corresponding <script type="math/tex">y_i\in\bR</script>, we want to model it linearly with</p>
+
+<script type="math/tex; mode=display">y = \Bx^T\Bw + b</script>
+
+<p>or simply</p>
+
+<script type="math/tex; mode=display">y = \tilde\Bx^T\tilde\Bw,\quad \tilde\Bx=\binom{\Bx}{1},\tilde\Bw=\binom{\Bw}{b}.</script>
+
+<p>If we choose L2-norm as the loss function, this becomes an optimization problem</p>
+
+<script type="math/tex; mode=display">\tilde\Bw^* = \mathop{argmin}\limits_{\tilde\Bw}\sum_{i=0}^{m-1}\Vert y_i-(\tilde\Bx_i^T\tilde\Bw)\Vert^2 = \mathop{argmin}\limits_{\tilde\Bw}J(\tilde\Bw).</script>
+
+<p>By expanding the objection function</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{array}{rcl}
+J(\tilde\Bw) &=& \sum\Vert y_i-(\tilde\Bx_i^T\tilde\Bw) \Vert^2 \\
+			   &=& \sum(y_i^2-2y_i(\tilde\Bx_i^T\tilde\Bw)+(\tilde\Bx_i^T\tilde\Bw)^2) \\
+\end{array} %]]></script>
+
+<p>we get the derivative</p>
+
+<script type="math/tex; mode=display">\frac{dJ}{d\tilde\Bw} = \sum(2(\tilde\Bx_i^T\tilde\Bw)\tilde\Bx_i-2y_i\tilde\Bx_i = 
+2\left(\sum(\tilde\Bx_i\tilde\Bx_i^T)\right)\tilde\Bw - 2\sum(y_i\tilde\Bx_i)</script>
+
+<p>The critical point is</p>
+
+<script type="math/tex; mode=display">\tilde\Bw^* = \left(\sum(\tilde\Bx_i\tilde\Bx_i^T)\right)^{-1}\sum(y_i\tilde\Bx_i) = (\tilde X\tilde X^T)^{-1}\tilde X\By.</script>
+
+<p>where</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+X=[\Bx_1,\Bx_2,\cdots,\Bx_m],\quad \tilde X = \begin{bmatrix}\Bx_1&\Bx_2&\cdots&\Bx_m\\1&1&\cdots&1\end{bmatrix}=\begin{bmatrix}X\\\mathbf{1}_m^T\end{bmatrix},\quad \By=(y_1,y_2,\cdots,y_m)^T. %]]></script>
+
+<h3 id="principal-component-analysis">Principal Component Analysis</h3>
 </body>
 </html>

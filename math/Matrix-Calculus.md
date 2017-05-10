@@ -94,3 +94,54 @@ In the expressions below matrices and vectors $$A,B,C$$ do not depend on $$X$$.
 	  * $$H(A\Bx+\Bb)^T(A\Bx+\Bb)=2A^TA$$
 	* Symmetric $$C$$: $$H(A\Bx+\Bb)^TC(A\Bx+\Bb)=2A^TCA$$
 
+
+## Applications
+
+### Least Square Regression
+For $$m$$ random sample $$\Bx_i\in\bR^n,i=0,1,\cdots,m-1$$ and corresponding $$y_i\in\bR$$, we want to model it linearly with
+
+$$
+y = \Bx^T\Bw + b
+$$
+
+or simply
+
+$$
+y = \tilde\Bx^T\tilde\Bw,\quad \tilde\Bx=\binom{\Bx}{1},\tilde\Bw=\binom{\Bw}{b}.
+$$
+
+If we choose L2-norm as the loss function, this becomes an optimization problem
+
+$$
+\tilde\Bw^* = \mathop{argmin}\limits_{\tilde\Bw}\sum_{i=0}^{m-1}\Vert y_i-(\tilde\Bx_i^T\tilde\Bw)\Vert^2 = \mathop{argmin}\limits_{\tilde\Bw}J(\tilde\Bw).
+$$
+
+By expanding the objection function
+
+$$
+\begin{array}{rcl}
+J(\tilde\Bw) &=& \sum\Vert y_i-(\tilde\Bx_i^T\tilde\Bw) \Vert^2 \\
+			   &=& \sum(y_i^2-2y_i(\tilde\Bx_i^T\tilde\Bw)+(\tilde\Bx_i^T\tilde\Bw)^2) \\
+\end{array}
+$$
+
+we get the derivative
+
+$$
+\frac{dJ}{d\tilde\Bw} = \sum(2(\tilde\Bx_i^T\tilde\Bw)\tilde\Bx_i-2y_i\tilde\Bx_i = 
+2\left(\sum(\tilde\Bx_i\tilde\Bx_i^T)\right)\tilde\Bw - 2\sum(y_i\tilde\Bx_i) 
+$$
+
+The critical point is
+
+$$
+\tilde\Bw^* = \left(\sum(\tilde\Bx_i\tilde\Bx_i^T)\right)^{-1}\sum(y_i\tilde\Bx_i) = (\tilde X\tilde X^T)^{-1}\tilde X\By.
+$$
+
+where
+
+$$
+X=[\Bx_1,\Bx_2,\cdots,\Bx_m],\quad \tilde X = \begin{bmatrix}\Bx_1&\Bx_2&\cdots&\Bx_m\\1&1&\cdots&1\end{bmatrix}=\begin{bmatrix}X\\\mathbf{1}_m^T\end{bmatrix},\quad \By=(y_1,y_2,\cdots,y_m)^T.
+$$
+
+### Principal Component Analysis
