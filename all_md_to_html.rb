@@ -7,16 +7,20 @@ def md_file_to_html(mdfilename)
 	return render_markdown_file_with_katex(mdfilename)
 end
 
-def find_all_files(path=".", extension="md")
-	return Dir.glob("#{path}/**/*.#{extension}")
+def find_all_files(path=".", extension=".md")
+	return Dir.glob("#{path}/**/*#{extension}")
 end
 
 def dirname(path)
 	return File.dirname(path)
 end
 
-def basename(path)
-	return File.basename(path)
+def basename(path, ext="")
+	if ext==""
+		return File.basename(path)
+	else
+		return File.basename(path, ext)
+	end
 end
 
 def mkdir(dirname)
@@ -31,28 +35,37 @@ def rmdir(dirname)
 	end
 end
 
-def get_html_filename(md_file)
-	return File.basename(md_file, ".md") + ".html"
-end
-
 def save_text(text, filename)
 	File.open(filename, 'w') do |f|
 		f.write(text)
 	end
 end
 
+def md_to_html(mdfile, htmlfile)
+	html = md_file_to_html(mdfile)
+	save_text(html, htmlfile)
+end
+
+def copyfile(src, dest)
+	FileUtils.cp(src,dest)
+end
+
+def dir_operation(path, postfix, newpath,postfix_replace, func)
+	files = find_all_files(path, postfix)
+	#p files
+	files.each do |f|
+		new_path = newpath + "/" + dirname(f)
+		mkdir(new_path)
+		newf = new_path + "/" + basename(f, postfix) + postfix_replace
+		func.call(f, newf)
+	end
+end
+
 def main()
 	base = "html"
 	rmdir(base)
-	md_files = find_all_files(".", "md")
-	md_files.each do |f|
-		md_base_file = basename(f)
-		html_file = get_html_filename(f)
-		html_path = base + "/" + dirname(f)
-		mkdir(html_path)
-		html = md_file_to_html(f)
-		save_text(html, html_path + "/" + get_html_filename(md_base_file))
-	end
+	dir_operation(".", ".md", base, ".html", method(:md_to_html))
+	dir_operation(".", ".png", base, ".png", method(:copyfile))
 end
 
 if __FILE__ == $0

@@ -16,12 +16,10 @@ $katex_script=" \
 $katex_config_script=" \
 <script src=\"https://code.jquery.com/jquery-1.12.4.js\"></script> \n\
 <script> \n\
-var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bw:'mathbf{w}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bR:'mathbb{R}', bZ:'mathbb{Z}'}; \n\
+var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Bc:'mathbf{c}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bh:'mathbf{h}', Bw:'mathbf{w}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bE:'mathbb{E}', bG:'mathbb{G}', bR:'mathbb{R}', bZ:'mathbb{Z}', cN: 'mathcal{N}'}; \n\
 var replace_tex_alias = function(text) {
 	for(var key in tex_alias) {
-		console.log(text);
 		text = text.replace(new RegExp('\\\\\\\\'+key, 'g'), '\\\\'+tex_alias[key]);
-		console.log(text);
 	}
 	return text;
 };
