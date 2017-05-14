@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous"> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script> 
+ <script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
+<script> 
+var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Bc:'mathbf{c}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bh:'mathbf{h}', Bw:'mathbf{w}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bE:'mathbb{E}', bG:'mathbb{G}', bR:'mathbb{R}', bZ:'mathbb{Z}', cN: 'mathcal{N}'}; 
+var replace_tex_alias = function(text) {
+	for(var key in tex_alias) {
+		text = text.replace(new RegExp('\\\\'+key, 'g'), '\\'+tex_alias[key]);
+	}
+	return text;
+};
+window.onload = function() { 
+$("script[type='math/tex']").replaceWith(function() { 
+	var tex = $(this).text(); 
+	tex = replace_tex_alias(tex); 
+	return katex.renderToString(tex, {displayMode: false}); 
+}); 
+$("script[type='math/tex; mode=display']").replaceWith(function() { 
+	var mode = $(this).parent()[0].nodeName.toLowerCase()!="li"; 
+	var html = $(this).html(); 
+	html = replace_tex_alias(html); 
+	return katex.renderToString(html.replace(/%.*/g, ''), {displayMode: mode}); 
+}); 
+}; 
+</script> 
+</head>
+<body>
+
+<h1 id="regularization-for-deep-learning">Regularization for Deep Learning</h1>
+
+<ul>
+  <li>regularization: any modification we make to a learning algorithm that is intended to reduce its generalization error but not its training error</li>
+  <li>strategies of regularization:
+    <ul>
+      <li>extra constraints, e.g. restrictions on parameter values</li>
+      <li>extra terms in the objectionve function, soft constraints on parameter values</li>
+      <li>used to encode specific kind of prior knowledge</li>
+      <li>designed to express a generic preference for a simpler model class in order to promote generalization</li>
+      <li>make an underdetermined problem determined</li>
+      <li>ensemble methods, combine multiple hypotheses that explain the training data</li>
+    </ul>
+  </li>
+  <li>regularizing estimator: trading increased bias for reduced variance. Goal of regularization is to transform the 3rd situation to 2nd situation
+    <ol>
+      <li>excluded the true data generating process, corresponding to underfitting and inducing bias</li>
+      <li>mathed the true data generating process</li>
+      <li>included the generating process but also many other possible generating processes</li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="parameter-norm-penalties">Parameter Norm Penalties</h2>
+
+<h3 id="l2-parameter-regularization"><script type="math/tex">L^2</script> Parameter Regularization</h3>
+
+<h3 id="l1-parameter-regularization"><script type="math/tex">L^1</script> Parameter Regularization</h3>
+
+<h2 id="norm-penalties-as-constrained-optimization">Norm Penalties as Constrained Optimization</h2>
+
+<h2 id="regularization-and-under-constrained-problems">Regularization and Under-Constrained Problems</h2>
+
+<h2 id="dataset-augmentation">Dataset Augmentation</h2>
+
+<h2 id="noise-robustness">Noise Robustness</h2>
+
+<h2 id="semi-supervised-learning">Semi-Supervised Learning</h2>
+
+<h2 id="multi-task-learning">Multi-Task Learning</h2>
+
+<h2 id="early-stopping">Early Stopping</h2>
+
+<h2 id="parameter-tying-and-parameter-sharing">Parameter Tying and Parameter Sharing</h2>
+
+<h2 id="sparse-representation">Sparse Representation</h2>
+
+<h2 id="bagging-and-other-ensemble-methods">Bagging and Other Ensemble Methods</h2>
+
+<h2 id="dropout">Dropout</h2>
+
+<h2 id="adversarial-training">Adversarial Training</h2>
+
+<h2 id="tangent-distance-tangent-prop-and-manifold-tangent-classifier">Tangent Distance, Tangent Prop, and Manifold Tangent Classifier</h2>
+</body>
+</html>

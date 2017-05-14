@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous"> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script> 
+ <script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
+<script> 
+var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Bc:'mathbf{c}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bh:'mathbf{h}', Bw:'mathbf{w}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bE:'mathbb{E}', bG:'mathbb{G}', bR:'mathbb{R}', bZ:'mathbb{Z}', cN: 'mathcal{N}'}; 
+var replace_tex_alias = function(text) {
+	for(var key in tex_alias) {
+		text = text.replace(new RegExp('\\\\'+key, 'g'), '\\'+tex_alias[key]);
+	}
+	return text;
+};
+window.onload = function() { 
+$("script[type='math/tex']").replaceWith(function() { 
+	var tex = $(this).text(); 
+	tex = replace_tex_alias(tex); 
+	return katex.renderToString(tex, {displayMode: false}); 
+}); 
+$("script[type='math/tex; mode=display']").replaceWith(function() { 
+	var mode = $(this).parent()[0].nodeName.toLowerCase()!="li"; 
+	var html = $(this).html(); 
+	html = replace_tex_alias(html); 
+	return katex.renderToString(html.replace(/%.*/g, ''), {displayMode: mode}); 
+}); 
+}; 
+</script> 
+</head>
+<body>
+
+<h1 id="chapter-6">Chapter 6</h1>
+
+<h2 id="example-learning-xor">Example: Learning XOR</h2>
+
+<p>Model</p>
+
+<script type="math/tex; mode=display">f(\Bx;W,c,\Bw,b) = \Bw^T\max\{\mathbf{0}, W^T\Bx+\Bc\} + b.</script>
+
+<p>where</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+W = \begin{bmatrix}1&1\\1&1\end{bmatrix},\quad c=\begin{bmatrix}0\\-1\end{bmatrix},\quad
+\Bw = \begin{bmatrix}1\\-2\end{bmatrix},\quad b=0. %]]></script>
+
+<p>such that</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{array}{rcl}
+(0,0)^T &\Longrightarrow& 0 \\
+(1,0)^T &\Longrightarrow& 1 \\
+(0,1)^T &\Longrightarrow& 1 \\
+(1,1)^T &\Longrightarrow& 0 
+\end{array} %]]></script>
+
+<h2 id="gradient-based-learning">Gradient-Based Learning</h2>
+
+<p><strong>Neural Network vs. Linear Model</strong>: the nonlinearity of NN leads to non-convex, thus no convergence guarantee for Stochastic Gradient Descent algorithm.</p>
+
+<h3 id="cost-functions">Cost Functions</h3>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>maximum likelihood: $$p(\By</td>
+          <td>\Bx;\theta)$$, cross-entropy(data, model)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>simplification: just predict some statistics of <script type="math/tex">\By</script> conditioned on <script type="math/tex">\Bx</script></li>
+  <li>regularization: weight decay approach</li>
+</ul>
+
+<h4 id="learning-conditional-distributions-with-maximum-likelyhood">Learning Conditional Distributions with Maximum Likelyhood</h4>
+
+<p>Negative log-likelyhood, equivalently the cross-entropy(data,model)</p>
+
+<script type="math/tex; mode=display">J(\theta) = -\bE_{\Bx,\By\sim\hat p_{data}}\log p_{model}(\By | \Bx).</script>
+
+<p>Example: if <script type="math/tex">p_{model}(\By\vert\Bx) = \cN(\By;f(\Bx;\theta),I)</script></p>
+
+<script type="math/tex; mode=display">J(\theta) = \frac12\bE_{\Bx,\By\sim\hat p_{data}}\lVert\By-f(\Bx;\theta)\rVert^2 + const.</script>
+
+<p>There is an equivalence between MLE (maximum likelihood estimation) and MSE (mean squared error), so that it is convenient to derive a cost function <script type="math/tex">\log p(\By\vert\Bx)</script> from a model <script type="math/tex">p(\By\vert\Bx)</script>.</p>
+
+<p>Neural network design: the gradient of the cost function must be large and predictable. Saturate/flat cost functions should be avoided. Many output units involve an <strong>exp</strong> function with very negative arguments, <script type="math/tex">-\log</script> undoes the effect.</p>
+
+<p>Problem of corss-entropy cost function: no minimum value in practice. Regularization techniques</p>
+
+<h4 id="learning-conditional-statistics">Learning Conditional Statistics</h4>
+
+<p>Full probability districution vs. conditional statistics: <script type="math/tex">\cN(\By;f(\Bx;\theta),I)</script></p>
+
+<p><strong>calculus of variations</strong>: view cost function as a functional</p>
+
+<script type="math/tex; mode=display">f^* = \mathop{argmin}\limits_f\bE_{\Bx,\By\sim p_{data}} \lVert\By-f(\Bx)\rVert^2</script>
+
+<p>yields</p>
+
+<script type="math/tex; mode=display">f^*(\Bx) = \bE_{\By\sim p_{data}(\By\vert\Bx)}[\By].</script>
+
+<p>Mean absolute error: predicts the <strong>median value</strong> of <script type="math/tex">\By</script> for each <script type="math/tex">\Bx</script></p>
+
+<script type="math/tex; mode=display">f^* = \mathop{argmin}\limits_f\bE_{\Bx,\By\sim p_{data}} \lVert\By-f(\Bx)\rVert_1</script>
+
+<p>Cross-entropy cost function is better than MSE or MAE, although it is not necessary to estimate an entire distribution <script type="math/tex">p(\By\vert\Bx)</script>.</p>
+
+<h3 id="output-units">Output Units</h3>
+
+<h4 id="linear-units-for-gaussian-output-distributions">Linear Units for Gaussian Output Distributions</h4>
+
+<p>Given features <script type="math/tex">\Bh</script>, linear output $\hat\By=W^T\Bh+\Bb$$ is often used to produce the mean of a conditional Gaussian distribution:</p>
+
+<script type="math/tex; mode=display">p(\By\vert\Bx) = \cN(\By;\hat\By,I).</script>
+
+<p>Maximizing the log-likelihood is then equivalent to minimizing MSE. It is straightforward to learn covariance of the Gaussian, however, the positive definite of cov is difficult to be satisfied.</p>
+
+<h4 id="sigmoid-units-for-bernoulli-output-distributions">Sigmoid Units for Bernoulli Output Distributions</h4>
+
+<p>Binary classification</p>
+
+<p>The following model has gradient of <script type="math/tex">\mathbf{0}</script>:</p>
+
+<script type="math/tex; mode=display">P(y=1\vert\Bx) = \max\left\{0,\min\{1,\Bw^T\Bh+b\}\right\}.</script>
+
+<p>Sigmoid units as alternative:</p>
+
+<script type="math/tex; mode=display">\hat y = \sigma\left(\Bw^T\Bh+b\right), \quad \sigma(z) = \frac{1}{1+e^{-z}}</script>
+
+<p>The distribution</p>
+
+<ul>
+  <li>unnormalized probability (assumption): <script type="math/tex">\log\tilde P(y) = yz \quad \Longrightarrow \tilde P(y)=e^{yz},y\in\{0,1\}</script></li>
+  <li>normalized probability: <script type="math/tex">P(y) = \frac{e^{yz}}{e^{0z}+e^{1z}} = \sigma((2y-1)z),y\in\{0,1\}</script></li>
+  <li>variable <script type="math/tex">z</script> is called a <strong>logit</strong></li>
+  <li>loss function <script type="math/tex">J</script>, softplus <script type="math/tex">\zeta</script></li>
+</ul>
+
+<script type="math/tex; mode=display">J(\theta) = -\log P(y\vert\Bx) = -\log\sigma((2y-1)z) = \zeta((1-2y)z), \quad \zeta(t) = \log(1+e^t).</script>
+
+<ul>
+  <li>Saturate situation: <script type="math/tex">(1-2y)z\to-\infty</script>, i.e. <script type="math/tex">y=0,z\to-\infty</script> or <script type="math/tex">y=1,z\to\infty</script></li>
+  <li>If <script type="math/tex">y</script> agrees with <script type="math/tex">z</script> and <script type="math/tex">\lvert z\vert</script> is large, <script type="math/tex">J</script> is saturate</li>
+  <li>If <script type="math/tex">y</script> disagrees with <script type="math/tex">z</script>, <script type="math/tex">(1-2y)z=\lvert z\rvert</script>, <script type="math/tex">J(\theta)=\zeta(\lvert z\rvert)</script>
+    <ul>
+      <li>Wrong prediction + large <script type="math/tex">\lvert z\lvert</script> <script type="math/tex">\Longrightarrow</script> large gradient <script type="math/tex">\Longrightarrow</script> quick correction</li>
+    </ul>
+  </li>
+</ul>
+
+<center><img src="logit.png" alt="Drawing" align="middle" style="width: 400px;" /></center>
+
+<ul>
+  <li>Implementation practice: view <script type="math/tex">J</script> as a function of <script type="math/tex">z</script>, rather than <script type="math/tex">\hat y=\sigma(z)</script>, to avoid <script type="math/tex">\log(0)</script></li>
+</ul>
+
+<h4 id="softmax-units-for-multinoulli-output-distributions">Softmax Units for Multinoulli Output Distributions</h4>
+
+<ul>
+  <li>Output <script type="math/tex">\hat\By, \hat y_i=P(y=i\vert\Bx)</script> with <script type="math/tex">\sum \hat y_i=1</script></li>
+  <li>After predicting an unnormalized log probabilites: <script type="math/tex">\Bz=W^T\Bh+\Bb</script> by a linear layer with <script type="math/tex">z_i=\log\tilde P(y=i\vert\Bx)</script>, we can normalize it as</li>
+</ul>
+
+<script type="math/tex; mode=display">softmax(\Bx)_i = \frac{e^{z_i}}{\sum_je^{z_j}}</script>
+
+<p>thus</p>
+
+<script type="math/tex; mode=display">\log P(y=i;\Bz)=\log softmax(\Bz)_i = z_i-\log\sum_je^{z_j} \approx z_i - \max\{z_j\}</script>
+
+<ul>
+  <li>If <script type="math/tex">\log P(y_i;\Bz)\to0</script>, then <script type="math/tex">y_i</script> contributes little to overall training cost</li>
+  <li>The final goal is</li>
+</ul>
+
+<script type="math/tex; mode=display">softmax(\Bz)_i \approx \frac{\sum_{j=1,y^j_i=1}^m 1}{\sum\sum y_i^j}.</script>
+
+<ul>
+  <li>log-likelyhood works well with softmax, because <strong>log</strong> undo <strong>exp</strong>.</li>
+  <li>Saturate situation for sigmoid: <script type="math/tex">\lvert z\rvert</script> is large</li>
+  <li>Saturate situation for softmax: <script type="math/tex">\lvert z_i-z_j\rvert</script> is large</li>
+  <li><script type="math/tex">n</script> arguments vs. <script type="math/tex">n-1</script> arguments: require <script type="math/tex">z_n=0</script></li>
+  <li>Neuroscientific point of view: winner-take-all</li>
+  <li><strong>softmax</strong>:
+    <ul>
+      <li><strong>soft</strong> means continuous and differentiable</li>
+      <li><strong>max</strong> means argmax</li>
+    </ul>
+  </li>
+</ul>
+
+<p><em>**</em> Other Output Types</p>
+
+<h2 id="hidden-units">Hidden Units</h2>
+
+<ul>
+  <li>Usually adopting a form of
+<script type="math/tex">\Bh = g(\Bz) = g(W^T\Bx+\Bb)</script></li>
+</ul>
+
+<h3 id="rectified-linear-units-and-their-generalizations">Rectified Linear Units and Their Generalizations</h3>
+
+<ul>
+  <li>activation function <script type="math/tex">g(z) = \max\{0,z\}</script></li>
+  <li>rectified linear units <script type="math/tex">\Bh=g(W^T\Bx+\Bb)</script> with small positive <script type="math/tex">\Bb_i</script>, e.g. <script type="math/tex">\Bb=0.1\mathbf{1}</script></li>
+  <li>drawback: inactive when <script type="math/tex">z\le0</script></li>
+  <li>generalizations: <script type="math/tex">h_i=g(\Bz,\alpha)_i=\max(0,z_i)+\alpha_i\min(0,z_i)</script>
+    <ul>
+      <li>Absolute value rectification: <script type="math/tex">\alpha_i=-1</script> so that $$g(z)=\lvert z\rvert$. used in object recognition</li>
+      <li>Leaky ReLU: <script type="math/tex">\alpha_i</script> is small, e.g. 0.01</li>
+      <li>Parametric ReLU (PReLU): <script type="math/tex">\alpha_i</script> is a learnable parameter</li>
+    </ul>
+  </li>
+  <li>Maxout units: devide <script type="math/tex">\Bz</script> to groups, used to learn convex and piecewise linear function
+<script type="math/tex">g(\Bz)_i = \max_{j\in\bG_i}z_j</script>
+    <ul>
+      <li>benefits: learn the function itself other than just parameters, require fewer parameters, resist <strong>catastropihc forgetting</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="logistic-sigmoid-and-hyperbolic-tangent">Logistic Sigmoid and Hyperbolic Tangent</h3>
+
+<ul>
+  <li>logistic: <script type="math/tex">g(z)=\sigma(z)=1/(1+e^{-z})</script></li>
+  <li>hyperbolic tangent: <script type="math/tex">g(z)=\tanh(z)=2\sigma(2z)-1</script></li>
+  <li>both is discouraged to used in hidden layer</li>
+  <li>hyerbolic tangent works better than logistic, because it resembles the identify function more closely</li>
+  <li>some cases sigmoidal activation functions are prefered: RNN, probabilistic models, autoencoders</li>
+</ul>
+
+<h3 id="other-hidden-units">Other Hidden Units</h3>
+
+<ul>
+  <li>active research area, no clear guidance</li>
+  <li>conventional linear hidden units work well</li>
+  <li>softmax/signoid are usually used as output units</li>
+  <li>multiple linear hidden layers: reduce parameters</li>
+  <li>common hidden unit types:
+    <ul>
+      <li>Radial basis function (RBF) <script type="math/tex">h_i=exp\left(-\frac{1}{\sigma_i^2}\lVert W_{:,i}-\Bx\rVert^2\right)</script>. Hard to train</li>
+      <li>Softplus: <script type="math/tex">g(a)=\zeta(a)=\log(1+e^a)</script>. Generally discouraged</li>
+      <li>Hard tanh: <script type="math/tex">g(a)=\max(-1,\min(1,a))</script>, similar to tanh and ReLU but bounded</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="architecture-design">Architecture Design</h2>
+
+<ul>
+  <li><strong>architecture</strong>: overall structure of the network, i.e. how many units, how they are connected</li>
+  <li>Usually grouped as chained layers, how to choose depth and width</li>
+</ul>
+
+<script type="math/tex; mode=display">\Bh^{(i+1)} = g^{(i+1)}\left({W^{(i+1)}}^T\Bh^{(i)}+\Bb^{(i+1)}\right),\quad \Bh^{(0)}=\Bx.</script>
+
+<h3 id="universal-approximation-properties-and-depth">Universal Approximation Properties and Depth</h3>
+
+<ul>
+  <li><strong>universal approximation theorem</strong>: a feedforward network with a linear output layer and at least hidden layer with any “squashing” activation function (e.g. logistic sigmoid) can approximate any Borel measurable function between two finite-dimensional spaces with any desired non-zero error, provided there are enough hidden units</li>
+  <li>“no free lunch” theorem: there is no universally superior machine learning algorithm</li>
+  <li>Representation exists, however, learning may fail, and generalization may fail</li>
+  <li>A bound on the size of NN: exponential in the worse cases</li>
+  <li>Shallow network may work, deep network seems better generalization</li>
+</ul>
+
+<h3 id="other-architectural-considerations">Other Architectural Considerations</h3>
+
+<ul>
+  <li>architectures: feedforward, CNN, RNN</li>
+  <li>main chain + skip connection</li>
+  <li>how to connection: full connection, sparse connection</li>
+</ul>
+
+<h2 id="back-propagation-and-other-differentiation-algorithms">Back-Propagation and Other Differentiation Algorithms</h2>
+
+<ul>
+  <li>Back-Propagation is used to compute the gradient, and then Stochastic graident descent (SGD) is used to perform learning using this gradient.</li>
+  <li>In learning algorithm, we compute the gradient of cost <script type="math/tex">\nabla_\theta J(\theta)</script></li>
+</ul>
+
+<h3 id="computational-graphs">Computational Graphs</h3>
+
+<h3 id="chain-rule-of-calculus">Chain Rule of Calculus</h3>
+
+<ul>
+  <li>Both vectors and tensors are considered as vector
+ <script type="math/tex">\nabla_X z = (\nabla_XY)^T\nabla_Y z = \sum_j(\nabla_X Y_j)\frac{\partial z}{\partial Y_j}</script></li>
+</ul>
+
+<h3 id="recursively-applying-the-chain-rule-to-obtain-backprop">Recursively Applying the Chain Rule to Obtain Backprop</h3>
+
+<h3 id="back-propagation-computation-in-fully-connected-mlp">Back-Propagation Computation in Fully-Connected MLP</h3>
+
+<h3 id="symbol-to-symbol-derivatives">Symbol-to-Symbol Derivatives</h3>
+
+<ul>
+  <li>symbol-to-number: Torch, Caffe</li>
+  <li>aditional nodes: Theano, Tensorflow</li>
+</ul>
+
+<center><img src="backpro-add-nodes.png" alt="Drawing" align="middle" style="width: 400px;" /></center>
+
+<h3 id="general-back-propagation">General Back-Propagation</h3>
+
+<ul>
+  <li><strong>op and op.bprop</strong>
+    <ul>
+      <li>For example <strong>mul</strong> is <script type="math/tex">C=AB</script>, <strong>mul.bprop</strong> for <script type="math/tex">\nabla_A C</script> is <script type="math/tex">g(G)=GB^T</script></li>
+    </ul>
+  </li>
+  <li>dynamical programming</li>
+</ul>
+
+<h3 id="example-back-propagation-for-mlp-training">Example: Back-Propagation for MLP Training</h3>
+
+<script type="math/tex; mode=display">X \Longrightarrow H=\max\{0,XW^{(1)}\} \Longrightarrow HW^{(2)}</script>
+
+<script type="math/tex; mode=display">J = J_{MLE} + \lambda\left(\lVert W^{(1)}\rVert_2^2 + \lVert W^{(2)}\rVert_2^2\right).</script>
+
+<center><img src="graph-mlp.png" alt="Drawing" align="middle" style="width: 400px;" /></center>
+
+<h3 id="complications">Complications</h3>
+
+<ul>
+  <li>multiple outputs</li>
+  <li>memory</li>
+  <li>data types</li>
+  <li>undefined gradients</li>
+  <li>real world differentiation</li>
+</ul>
+
+<h3 id="differentiation-outside-the-deep-learning-community">Differentiation outside the Deep Learning Community</h3>
+
+<ul>
+  <li>automatic differentiaion</li>
+  <li>reverse mode accumulation</li>
+  <li>forward mode accumulation</li>
+</ul>
+
+<h3 id="higher-order-derivatives">Higher-Order Derivatives</h3>
+
+<ul>
+  <li>Hessian matrix: Krylov methods</li>
+</ul>
+
+<h2 id="historical-notes">Historical Notes</h2>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous"> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script> 
+ <script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
+<script> 
+var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Bc:'mathbf{c}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bh:'mathbf{h}', Bw:'mathbf{w}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bE:'mathbb{E}', bG:'mathbb{G}', bR:'mathbb{R}', bZ:'mathbb{Z}', cN: 'mathcal{N}'}; 
+var replace_tex_alias = function(text) {
+	for(var key in tex_alias) {
+		text = text.replace(new RegExp('\\\\'+key, 'g'), '\\'+tex_alias[key]);
+	}
+	return text;
+};
+window.onload = function() { 
+$("script[type='math/tex']").replaceWith(function() { 
+	var tex = $(this).text(); 
+	tex = replace_tex_alias(tex); 
+	return katex.renderToString(tex, {displayMode: false}); 
+}); 
+$("script[type='math/tex; mode=display']").replaceWith(function() { 
+	var mode = $(this).parent()[0].nodeName.toLowerCase()!="li"; 
+	var html = $(this).html(); 
+	html = replace_tex_alias(html); 
+	return katex.renderToString(html.replace(/%.*/g, ''), {displayMode: mode}); 
+}); 
+}; 
+</script> 
+</head>
+<body>
+
+<h1 id="optimization-for-training-deep-models">Optimization for Training Deep Models</h1>
+
+<h2 id="how-learning-differs-from-pure-optimization">How Learning Differs from Pure Optimization</h2>
+
+<h2 id="challenges-in-neural-network-optimizatino">Challenges in Neural Network Optimizatino</h2>
+
+<h2 id="basic-algorithms">Basic Algorithms</h2>
+
+<h2 id="parameter-initialization-strategies">Parameter initialization Strategies</h2>
+
+<h2 id="algorithms-with-adaptive-learning-rates">Algorithms with Adaptive Learning Rates</h2>
+
+<h2 id="approximate-second-order-methods">Approximate Second-Order Methods</h2>
+
+<h2 id="optimization-strategies-and-meta-algorithms">Optimization Strategies and Meta-Algorithms</h2>
+
+</body>
+</html>
