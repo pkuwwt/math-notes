@@ -33,7 +33,7 @@ $$
 
 ### Cost Functions
 
-  * maximum likelihood: $$p(\By |  \Bx;\theta)$$, cross-entropy(data, model)
+  * maximum likelihood: $$p(\By \vert  \Bx;\theta)$$, cross-entropy(data, model)
   * simplification: just predict some statistics of $$\By$$ conditioned on $$\Bx$$
   * regularization: weight decay approach
 
