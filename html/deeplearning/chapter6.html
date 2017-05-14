@@ -231,7 +231,7 @@ W = \begin{bmatrix}1&1\\1&1\end{bmatrix},\quad c=\begin{bmatrix}0\\-1\end{bmatri
   <li>multiple linear hidden layers: reduce parameters</li>
   <li>common hidden unit types:
     <ul>
-      <li>Radial basis function (RBF) <script type="math/tex">h_i=exp\left(-\frac{1}{\sigma_i^2}\lVert W_{:,i}-\Bx\rVert^2\right)</script>. Hard to train</li>
+      <li>Radial basis function (RBF) <script type="math/tex">h_i=\exp\left(-\frac{1}{\sigma_i^2}\lVert W_{:,i}-\Bx\rVert^2\right)</script>. Hard to train</li>
       <li>Softplus: <script type="math/tex">g(a)=\zeta(a)=\log(1+e^a)</script>. Generally discouraged</li>
       <li>Hard tanh: <script type="math/tex">g(a)=\max(-1,\min(1,a))</script>, similar to tanh and ReLU but bounded</li>
     </ul>

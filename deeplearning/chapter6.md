@@ -199,7 +199,7 @@ $$
   * softmax/signoid are usually used as output units
   * multiple linear hidden layers: reduce parameters
   * common hidden unit types:
-    * Radial basis function (RBF) $$h_i=exp\left(-\frac{1}{\sigma_i^2}\lVert W_{:,i}-\Bx\rVert^2\right)$$. Hard to train
+    * Radial basis function (RBF) $$h_i=\exp\left(-\frac{1}{\sigma_i^2}\lVert W_{:,i}-\Bx\rVert^2\right)$$. Hard to train
 	* Softplus: $$g(a)=\zeta(a)=\log(1+e^a)$$. Generally discouraged
 	* Hard tanh: $$g(a)=\max(-1,\min(1,a))$$, similar to tanh and ReLU but bounded
 
