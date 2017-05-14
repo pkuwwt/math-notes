@@ -16,7 +16,52 @@
 
 ## Parameter Norm Penalties
 
+  * Regularized objective function
+
+$$
+\begin{array}{rcl}
+\tilde J(\theta;X,y) &=& J(\theta;X,y)+\alpha\Omega(\theta), \quad\alpha\in[0,\infty) \\
+\tilde J(\Bw,\Bb;X,y) &=& J(\Bw,\Bb;X,y)+\alpha\Omega(\Bw) 
+\end{array}
+$$
+
 ### $$L^2$$ Parameter Regularization
+
+  * weight decay, ridge regression or Tikhonov regularization
+
+$$
+\tilde J(\Bw;X,y) = J(\Bw;X,y) + \frac\alpha2\Bw^T\Bw
+$$
+
+  * gradient update
+
+$$
+\begin{array}{rcl}
+\nabla_\Bw\tilde J &=& \alpha\Bw + \nabla_\Bw J \\
+\Bw &\leftarrow& \Bw-\epsilon\nabla_\Bw\tilde J = (1-\epsilon\alpha)\Bw - \epsilon\nabla_\Bw J
+\end{array}
+$$
+
+  * approxmation of $$\tilde J$$, $$\Bw^*$$ the minimum, $$H$$ positive semidefinite
+
+$$
+\hat J(\Bw) = J(\Bw^*) + \frac12(\Bw-\Bw^*)^TH(\Bw-\Bw^*)
+$$
+
+  * gradient of $$\hat J$$
+
+$$
+\nabla_\Bw\hat J(\Bw) = H(\Bw-\Bw^*)\to0 \Longrightarrow \tilde\Bw=(H+\alpha I)^{-1}H\Bw^*
+$$
+
+  * By eigen-decomposition $$H=Q\Lambda Q^T$$, where $$\Lambda$$ diagonal
+
+$$
+\tilde\Bw = Q(\Lambda+\alpha I)^{-1}\Lambda Q^T\Bw^*
+$$
+
+  * Scale factor along $$i$$-th eigenvector $$\frac{\lambda_i}{\lambda_i+\alpha}$$
+  * effects: rule out small $$\lambda_i$$ so that the ellipsoids of contours becomes rounder
 
 ### $$L^1$$ Parameter Regularization
 

@@ -54,7 +54,56 @@ $("script[type='math/tex; mode=display']").replaceWith(function() {
 
 <h2 id="parameter-norm-penalties">Parameter Norm Penalties</h2>
 
+<ul>
+  <li>Regularized objective function</li>
+</ul>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{array}{rcl}
+\tilde J(\theta;X,y) &=& J(\theta;X,y)+\alpha\Omega(\theta), \quad\alpha\in[0,\infty) \\
+\tilde J(\Bw,\Bb;X,y) &=& J(\Bw,\Bb;X,y)+\alpha\Omega(\Bw) 
+\end{array} %]]></script>
+
 <h3 id="l2-parameter-regularization"><script type="math/tex">L^2</script> Parameter Regularization</h3>
+
+<ul>
+  <li>weight decay, ridge regression or Tikhonov regularization</li>
+</ul>
+
+<script type="math/tex; mode=display">\tilde J(\Bw;X,y) = J(\Bw;X,y) + \frac\alpha2\Bw^T\Bw</script>
+
+<ul>
+  <li>gradient update</li>
+</ul>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{array}{rcl}
+\nabla_\Bw\tilde J &=& \alpha\Bw + \nabla_\Bw J \\
+\Bw &\leftarrow& \Bw-\epsilon\nabla_\Bw\tilde J = (1-\epsilon\alpha)\Bw - \epsilon\nabla_\Bw J
+\end{array} %]]></script>
+
+<ul>
+  <li>approxmation of <script type="math/tex">\tilde J</script>, <script type="math/tex">\Bw^*</script> the minimum, <script type="math/tex">H</script> positive semidefinite</li>
+</ul>
+
+<script type="math/tex; mode=display">\hat J(\Bw) = J(\Bw^*) + \frac12(\Bw-\Bw^*)^TH(\Bw-\Bw^*)</script>
+
+<ul>
+  <li>gradient of <script type="math/tex">\hat J</script></li>
+</ul>
+
+<script type="math/tex; mode=display">\nabla_\Bw\hat J(\Bw) = H(\Bw-\Bw^*)\to0 \Longrightarrow \tilde\Bw=(H+\alpha I)^{-1}H\Bw^*</script>
+
+<ul>
+  <li>By eigen-decomposition <script type="math/tex">H=Q\Lambda Q^T</script>, where <script type="math/tex">\Lambda</script> diagonal</li>
+</ul>
+
+<script type="math/tex; mode=display">\tilde\Bw = Q(\Lambda+\alpha I)^{-1}\Lambda Q^T\Bw^*</script>
+
+<ul>
+  <li>Scale factor along <script type="math/tex">i</script>-th eigenvector <script type="math/tex">\frac{\lambda_i}{\lambda_i+\alpha}</script></li>
+  <li>effects: rule out small <script type="math/tex">\lambda_i</script> so that the ellipsoids of contours becomes rounder</li>
+</ul>
 
 <h3 id="l1-parameter-regularization"><script type="math/tex">L^1</script> Parameter Regularization</h3>
 
