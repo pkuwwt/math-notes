@@ -61,9 +61,15 @@ $$
 $$
 
   * Scale factor along $$i$$-th eigenvector $$\frac{\lambda_i}{\lambda_i+\alpha}$$
-  * effects: rule out small $$\lambda_i$$ so that the ellipsoids of contours becomes rounder
+  * effects: rule out small $$\lambda_i$$ so that the contour ellipsoids of $$J(\Bw)$$ becomes rounder
 
 ### $$L^1$$ Parameter Regularization
+
+  * $$L^1$$ regularization
+
+$$
+\tilde J(\Bw;X,\By) = J(\Bw; X,\By) + \alpha\lVert\Bw\rVert_1
+$$
 
 ## Norm Penalties as Constrained Optimization
 
