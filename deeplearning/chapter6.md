@@ -175,7 +175,7 @@ $$
   * rectified linear units $$\Bh=g(W^T\Bx+\Bb)$$ with small positive $$\Bb_i$$, e.g. $$\Bb=0.1\mathbf{1}$$
   * drawback: inactive when $$z\le0$$
   * generalizations: $$h_i=g(\Bz,\alpha)_i=\max(0,z_i)+\alpha_i\min(0,z_i)$$
-    * Absolute value rectification: $$\alpha_i=-1$$ so that $$g(z)=\lvert z\rvert$. used in object recognition
+    * Absolute value rectification: $$\alpha_i=-1$$ so that $$g(z)=\lvert z\rvert$$. used in object recognition
 	* Leaky ReLU: $$\alpha_i$$ is small, e.g. 0.01
 	* Parametric ReLU (PReLU): $$\alpha_i$$ is a learnable parameter
   * Maxout units: devide $$\Bz$$ to groups, used to learn convex and piecewise linear function
