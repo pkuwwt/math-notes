@@ -160,7 +160,7 @@ $$
     * **soft** means continuous and differentiable
 	* **max** means argmax
 
-**** Other Output Types
+#### Other Output Types
 
 ## Hidden Units
 
