@@ -85,7 +85,7 @@ Cross-entropy cost function is better than MSE or MAE, although it is not necess
 
 #### Linear Units for Gaussian Output Distributions
 
-Given features $$\Bh$$, linear output $\hat\By=W^T\Bh+\Bb$$ is often used to produce the mean of a conditional Gaussian distribution:
+Given features $$\Bh$$, linear output $$\hat\By=W^T\Bh+\Bb$$ is often used to produce the mean of a conditional Gaussian distribution:
 
 $$
 p(\By\vert\Bx) = \cN(\By;\hat\By,I).
