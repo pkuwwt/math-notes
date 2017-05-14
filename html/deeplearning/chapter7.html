@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta charset="UTF-8">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous"> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script> 
  <script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
@@ -102,10 +102,16 @@ $("script[type='math/tex; mode=display']").replaceWith(function() {
 
 <ul>
   <li>Scale factor along <script type="math/tex">i</script>-th eigenvector <script type="math/tex">\frac{\lambda_i}{\lambda_i+\alpha}</script></li>
-  <li>effects: rule out small <script type="math/tex">\lambda_i</script> so that the ellipsoids of contours becomes rounder</li>
+  <li>effects: rule out small <script type="math/tex">\lambda_i</script> so that the contour ellipsoids of <script type="math/tex">J(\Bw)</script> becomes rounder</li>
 </ul>
 
 <h3 id="l1-parameter-regularization"><script type="math/tex">L^1</script> Parameter Regularization</h3>
+
+<ul>
+  <li><script type="math/tex">L^1</script> regularization</li>
+</ul>
+
+<script type="math/tex; mode=display">\tilde J(\Bw;X,\By) = J(\Bw; X,\By) + \alpha\lVert\Bw\rVert_1</script>
 
 <h2 id="norm-penalties-as-constrained-optimization">Norm Penalties as Constrained Optimization</h2>
 
