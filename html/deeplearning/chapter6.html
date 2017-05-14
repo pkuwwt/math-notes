@@ -5,12 +5,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script> 
  <script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
 <script> 
-var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bR:'mathbb{R}', bZ:'mathbb{Z}'}; 
+var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Bc:'mathbf{c}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bh:'mathbf{h}', Bw:'mathbf{w}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bE:'mathbb{E}', bG:'mathbb{G}', bR:'mathbb{R}', bZ:'mathbb{Z}', cN: 'mathcal{N}'}; 
 var replace_tex_alias = function(text) {
 	for(var key in tex_alias) {
-		console.log(text);
 		text = text.replace(new RegExp('\\\\'+key, 'g'), '\\'+tex_alias[key]);
-		console.log(text);
 	}
 	return text;
 };
@@ -184,7 +182,7 @@ W = \begin{bmatrix}1&1\\1&1\end{bmatrix},\quad c=\begin{bmatrix}0\\-1\end{bmatri
   </li>
 </ul>
 
-<p><em>**</em> Other Output Types</p>
+<h4 id="other-output-types">Other Output Types</h4>
 
 <h2 id="hidden-units">Hidden Units</h2>
 
