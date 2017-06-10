@@ -18,6 +18,13 @@ marked.setOptions({
 	smartLists: true,
 	smartypants: false
 });
+var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Bc:'mathbf{c}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bh:'mathbf{h}', Bw:'mathbf{w}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bE:'mathbb{E}', bG:'mathbb{G}', bR:'mathbb{R}', bZ:'mathbb{Z}', cN: 'mathcal{N}'}; 
+var replace_tex_alias = function(text) {
+	for(var key in tex_alias) {
+		text = text.replace(new RegExp('\\\\'+key, 'g'), '\\'+tex_alias[key]);
+	}
+	return text;
+};
 var getURLParameter = function(name) {
 	  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 }
@@ -64,6 +71,7 @@ var handle_inline_math = function(html) {
 		if(tex.length==0) return tex;
 		if(tex[0]=='$' && tex[tex.length-1]=='$') {
 			tex = tex.substr(1,tex.length-2);
+			tex = replace_tex_alias(tex);
 			return katex.renderToString(tex, {displayMode: false}); 
 		}
 		else {
@@ -77,6 +85,7 @@ var handle_display_math = function(html) {
 	obj.find("code[class='lang-math']").replaceWith(function() { 
 		var html = $(this).html(); 
 		html = html.replace(/amp;/g, ''); // a bug of marked: parsing & to &amp;
+		html = replace_tex_alias(html);
 		return katex.renderToString(html.replace(/%.*/g, ''), {displayMode: true}); 
 	}); 
 	return obj.html();
@@ -110,14 +119,26 @@ var pair_replace = function(text, begin, end, begin_repl, end_repl) {
 	var out = strs2.join('') + text.substr(positions[positions.length-1] + end.length);
 	return out;
 };
+String.prototype.replaceFirstWithEndPos = function(search, replacement, startpos) {
+	var target = this.slice(startpos);
+	var match = target.match(search);
+	if(match.length==0) return [this, -1];
+	var s = this.slice(0,match.index) + replacement + this.slice(match.index+match[0].length);
+	return [s,match.index+replacement.length];
+};
 var handle_katex_synatx = function(text) {
-	console.log(text);
-	text = pair_replace(text, '$$\n', '$$\n', '```math\n', '```\n');
-	console.log(text);
 	lines = split_lines(text);
-	return lines.map(function(line){
+	var count = 0;
+	text = lines.map(function(line){
+		if(line=='$$') {
+			count = count + 1;
+			if(count%2==1) return '```math';
+			else return '```';
+		}
 		return pair_replace(line, '$$', '$$', '`$', '$`');
 	}).join('\n');
+	console.log(text);
+	return text;
 };
 var main = function(callback) {
 	var file = get_markdown_file();
