@@ -182,7 +182,7 @@ $$
 $$
 	g(\Bz)_i = \max_{j\in\bG_i}z_j
 $$
-    * benefits: learn the function itself other than just parameters, require fewer parameters, resist **catastropihc forgetting**
+    * benefits: learn the function itself other than just parameters, require fewer parameters, resist **catastrophic forgetting**
 
 ### Logistic Sigmoid and Hyperbolic Tangent
 
