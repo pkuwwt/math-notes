@@ -81,9 +81,43 @@ var handle_display_math = function(html) {
 	}); 
 	return obj.html();
 };
+var split_lines = function(text) {
+	return text.split("\n");
+};
+var merge_lines = function(lines) {
+	return lines.join("\n");
+};
+var pair_replace = function(text, begin, end, begin_repl, end_repl) {
+	var positions = [];
+	var strs = [begin, end];
+	var strs_repl = [begin_repl, end_repl];
+	var index = text.indexOf(begin, 0);
+	var startpos = index + begin.length;
+	while(index>=0 && startpos<text.length) {
+		positions.push(index);
+		startpos = index + begin.length;
+		index = text.indexOf(strs[positions.length%2], startpos);
+	}
+	if(positions.length%2==1) positions = positions.slice(0,positions.length-1);
+	if(positions.length==0) return text;
+	var strs2 = positions.map(function(pos, index, arr) {
+		var s = strs_repl[index%2];
+		var last_end = 0;
+		if(index!=0) last_end = arr[index-1] + strs[(index-1)%2].length;
+		s = text.slice(last_end, pos) + s;
+		return s;
+	});
+	var out = strs2.join('') + text.substr(positions[positions.length-1] + end.length);
+	return out;
+};
 var handle_katex_synatx = function(text) {
-	//TODO
-	return text;
+	console.log(text);
+	text = pair_replace(text, '$$\n', '$$\n', '```math\n', '```\n');
+	console.log(text);
+	lines = split_lines(text);
+	return lines.map(function(line){
+		return pair_replace(line, '$$', '$$', '`$', '$`');
+	}).join('\n');
 };
 var main = function(callback) {
 	var file = get_markdown_file();
