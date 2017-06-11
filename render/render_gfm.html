@@ -7,6 +7,11 @@
 		  <link rel="stylesheet" href="katex/katex.min.css"> 
 		  <script src="katex/katex.min.js"></script> 
 		  <script src="jquery.min.js"></script> 
+		  <link rel="stylesheet" href="highlight/default.min.css">
+		  <script src="highlight/highlight.min.js"></script>
+		  <script>hljs.initHighlightingOnLoad();</script>
+		  <!--
+		  -->
 		  <script>
 marked.setOptions({
 	renderer: new marked.Renderer(),
@@ -87,6 +92,7 @@ var handle_display_math = function(html) {
 		var html = $(this).html(); 
 		html = html.replace(/amp;/g, ''); // a bug of marked: parsing & to &amp;
 		html = replace_tex_alias(html);
+		console.log(html);
 		return katex.renderToString(html.replace(/%.*/g, ''), {displayMode: true}); 
 	}); 
 	return obj.html();
