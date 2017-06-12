@@ -46,7 +46,7 @@ def increment(a):
 	return a+1
 ```
 
-#### No iteration
+#### Iteration vs. `map/reduce`
 
   * unfunctional
 ```python
@@ -58,3 +58,42 @@ squares = [x*x for x in [0,1,2,3,4]]
 name_lengths = map(len, ["Mary", "Isla", "Sam"])
 squares = map(lambda x: x*x, [0,1,2,3,4])
 ```
+  * unfunctional 
+```python
+sum = 0
+for i in [0,1,2,3,4]:
+	sum += i
+```
+  * unfunctional 
+```python
+sum = reduce(lambda a,x: a+x, [0,1,2,3,4])
+# or
+sum = reduce(lambda a,x: a+x, [0,1,2,3,4], 0)
+```
+
+#### Benefits of `map/reduce`
+
+  * They are often one-liners
+  * The collection, the operation and the return value are always in the same places
+  * Loop may affect other variables, `map/reduce` are functional by convention.
+  * `map/reduce` are elemental operations, easy to understand
+  * `map/reduce` have other variants for basic behaviors: `filter`, `all`, `any`, `find`
+
+```python
+people = [{'name': 'Mary', 'height': 160},
+	{'name': 'Isla', 'height': 80},
+	{'name': 'Sam'}]
+heights = map(lambda x: x['height'], filter(lambda x: 'height' in x, people))
+if len(heights)>0:
+	from operator import add
+	average_height = reduce(add, heights) / len(heights)
+```
+ 
+
+
+
+
+
+
+
+
