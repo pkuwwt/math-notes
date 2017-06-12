@@ -37,13 +37,13 @@ Programming techniques:
 ```python
 a = 0
 def increment():
-	global a
-	a += 1
+    global a
+    a += 1
 ```
   * functional function
 ```python
 def increment(a):
-	return a+1
+    return a+1
 ```
 
 #### Iteration vs. `map/reduce`
@@ -62,7 +62,7 @@ squares = map(lambda x: x*x, [0,1,2,3,4])
 ```python
 sum = 0
 for i in [0,1,2,3,4]:
-	sum += i
+    sum += i
 ```
   * unfunctional 
 ```python
@@ -81,12 +81,12 @@ sum = reduce(lambda a,x: a+x, [0,1,2,3,4], 0)
 
 ```python
 people = [{'name': 'Mary', 'height': 160},
-	{'name': 'Isla', 'height': 80},
-	{'name': 'Sam'}]
+    {'name': 'Isla', 'height': 80},
+    {'name': 'Sam'}]
 heights = map(lambda x: x['height'], filter(lambda x: 'height' in x, people))
 if len(heights)>0:
-	from operator import add
-	average_height = reduce(add, heights) / len(heights)
+    from operator import add
+    average_height = reduce(add, heights) / len(heights)
 ```
  
 
