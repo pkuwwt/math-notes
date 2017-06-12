@@ -15,11 +15,11 @@ Functional techniques:
   * Higher order functions
 
 Language features:
-  * mapping
-  * pipelining
-  * recursing
-  * currying<sup>[4](#myfootnote4)</sup>
-  * use of higher order functions
+  * Mapping
+  * Pipelining
+  * Recursing
+  * Currying<sup>[4](#myfootnote4)</sup>
+  * Use of higher order functions
 
 Programming techniques:
   * Parallelization
@@ -220,12 +220,132 @@ if len(heights)>0:
 								pluck(['name','country'])])
 ```
 
+### FP in javascript
+
+#### Task: print a list
+```javascript
+const myList = [{name: 'Don'}, {name: 'Ann'}, {name: 'Sally'}, {name: 'John'}];
+for(int i=0;i<list.length;i++) {
+	const person = list[i];
+	console.log(person.name);
+}
+```
+
+#### More declarative
+```javascript
+const printNames = list => {
+	for(int i=0;i<list.length;i++) {
+		const person = list[i];
+		console.log(person.name);
+	}
+};
+printNames(myList);
+```
+
+#### What about different data/task?
+```javascript
+const myList = [{'name': 'John', 'age': 20}];
+const forEach = (fn, list) => {
+	for(let i=0;i<list.length;i++) {
+		const item = list[i];
+		fn(item);
+	}
+};
+const printName = person => console.log(person.name);
+const printAge = person => console.log(person.age);
+forEach(printName, myList);
+forEach(printAge, myList);
+```
+
+#### How about more task-concentrated?
+
+```javascript
+const names = [];
+const addToNames = person => names.push(person.name);
+const ages = [];
+const addToAges = person => ages.push(person.age);
+forEach(addToNames, myList);
+forEach(addToAges, myList);
+console.log(names);
+console.log(ages);
+```
+
+#### Remove states
+
+Higher order function is defined.
+
+```javascript
+const map = (fn, list) => {
+	const result = [];
+	for(let i=0;i<list.length;i++) {
+		const item = list[i];
+		result.push(fn(item));
+	}
+	return result;
+};
+const getName = person => person.name;
+const getAge = person => person.age;
+const names = map(getName, myList);
+const ages  = map(getAge, myList);
+```
+
+#### Further separating data from function
+
+What a functional looks like?
+```javascript
+const prop = key => obj => obj[key];
+const names = map(prop('name'), myList);
+const ages  = map(prop('age'), myList);
+```
+
+#### Currying
+  * Currying transform a function with $$n$$ arguments to another function which is allowed to take less than $$n$$ arguments.
+  * A curried version of `map()` and `prop()`:
+```javascript
+    const curry = fn => (...args) => 
+    	args.length >= fn.length 
+    	? fn(...args) 
+    	: (...otherArgs) => curry(fn)(...args, ...otherArgs);
+    const map = curry((fn, list) => {
+    	const result = [];
+    	for(let i=0;i<list.length;i++) {
+    		const item = list[i];
+    		result.push(fn(item));
+    	}
+    	return result;
+    });
+    const prop = curry((key, obj) => obj[key]);
+```
+  * Note that, while original `map()` must take two arguments, 1 argument is allowed here. An equivalent way is
+```javascript
+	const map = fn => list => {
+    	const result = [];
+    	for(let i=0;i<list.length;i++) {
+    		const item = list[i];
+    		result.push(fn(item));
+    	}
+    	return result;
+	};
+```
+  * So currying is used to transform an already defined function to a more flexible one.
+
+#### Composition
+
+```javascript
+const compose = (...fns) => start => fns.reduceRight((state, fn) => fn(state), start);
+const upperCase = curry((str) => str.toUpperCase());
+const formatName = compose(upperCase, prop('name'));
+const person = {name: 'Tim'};
+console.log(formatName(person));
+```
+
+
 ## References
 
   * <a name="myfootnote1">1</a>: A piece of **immutable data** is one that cannot be changed. Some languages, like Clojure, make all values immutable by default. Immutable data eliminates bugs.
   * <a name="myfootnote2">2</a>: Languages that support **first class functions** allow functions to be treated like any other value.
   * <a name="myfootnote3">3</a>: **Tail call optimization** It is a programming feature. In general, the frame stack may become very large after a large number of recursive function call. Language with tail call optimisation reuse the same stack frame for their entire sequence of recursive calls. Python does not support tail call optimisation.
-  * <a name="myfootnote4">4</a>: **Curying** is a technique that transform `func(arg1, arg2, ...)` to `func1(arg1) { return func2(arg2,...); }`
+  * <a name="myfootnote4">4</a>: **Currying** is a technique that transform `func(arg1, arg2, ...)` to `func1(arg1) { return func2(arg2,...); }`
   * <a name="myfootnote5">5</a>: **Lazy evaluation** is a compiler technique that avoids running code until the result is needed.
   * <a name="myfootnote6">6</a>: A process is **deterministic** if repetitions yield the same result every time.
 
