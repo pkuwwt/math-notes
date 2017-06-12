@@ -348,6 +348,8 @@ console.log(formatName(person));
   * <a name="myfootnote4">4</a>: **Currying** is a technique that transform `func(arg1, arg2, ...)` to `func1(arg1) { return func2(arg2,...); }`
   * <a name="myfootnote5">5</a>: **Lazy evaluation** is a compiler technique that avoids running code until the result is needed.
   * <a name="myfootnote6">6</a>: A process is **deterministic** if repetitions yield the same result every time.
+  * [A practical introduction to functional programming](https://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming)
+  * [Iteration: A Gentle Introduction to Functional Programming](https://medium.com/javascript-scene/iteration-a-gentle-introduction-to-functional-programming-c59fcb0ab58d)
 
 
 
