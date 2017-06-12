@@ -4,10 +4,10 @@
 ## Introduction
 
 Functional characteristics:
-  * immutable data1
-  * first class functions2
-  * tail call optimisation3
-  * MOST IMPORTANT: absense of side effects
+  * immutable data<sup>[1](#myfootnote1)</sup>
+  * first class functions<sup>[2](#myfootnote2)</sup>
+  * tail call optimisation<sup>[3](#myfootnote3)</sup>
+  * **MOST IMPORTANT**: absense of side effects
 
 Functional techniques:
   * Composition
@@ -18,13 +18,13 @@ Language features:
   * mapping
   * pipelining
   * recursing
-  * currying 4
+  * currying<sup>[4](#myfootnote4)</sup>
   * use of higher order functions
 
 Programming techniques:
-  * parallelization 5
-  * lazy evaluation 6
-  * determisism 7
+  * Parallelization
+  * Lazy evaluation<sup>[5](#myfootnote5)</sup>
+  * Determinism<sup>[6](#myfootnote6)</sup>
 
 
 ## Functional Programming Language
@@ -180,8 +180,54 @@ if len(heights)>0:
 	def pipeline_each(data, functions):
 		return reduce(lambda a, x: map(x,a), functions, data)
 ```
+  * or a less readable version 
+```python
+	print pipeline_each(bands, [call(lambda x: 'Canada', 'country'),
+								call(lambda x: x.replace('.', ''), 'name'),
+								call(str.title, 'name')])
+	def assoc(_d, key, value):
+		from copy import deepcopy
+		d = deepcopy(_d)
+		d[key] = value
+		return d
+	def call(func, key):
+		def apply_func(record):
+			return assoc(record, key, func(record.get(key)))
+		return apply_func
+```
+  * Techniques used above:
+    * **Higher order function** `call()`. A higher order function takes a function as argument or return a function.
+	* `call()` does not do actual work, `apply_func()`, when called, will do the work: look up -> apply -> assign back
+	* **Closure**. `func` and `key` in `apply_func()` are references to closed over variables in outer scope, leading to a scope chain.
+  * Another task: extracting name and country 
+```python
+	def extract_name_and_country(band):
+		plucked_band = {}
+		plucked_band['name'] = band['name']
+		plucked_band['country'] = band['country']
+		return plucked_band
+	print pipeline_each(bands, [call(lambda x: 'Canada', 'country'),
+								call(lambda x: x.replace('.', ''), 'name'),
+								call(str.title, 'name'),
+								extract_name_and_country])
+	def pluck(keys):
+		def pluck_func(record):
+			return reduce(lambda a,x: assoc(a,x,record[x]), keys, {})
+		return pluck_func
+	print pipeline_each(bands, [call(lambda x: 'Canada', 'country'),
+								call(lambda x: x.replace('.', ''), 'name'),
+								call(str.title, 'name'),
+								pluck(['name','country'])])
+```
 
+## References
 
+  * <a name="myfootnote1">1</a>: A piece of **immutable data** is one that cannot be changed. Some languages, like Clojure, make all values immutable by default. Immutable data eliminates bugs.
+  * <a name="myfootnote2">2</a>: Languages that support **first class functions** allow functions to be treated like any other value.
+  * <a name="myfootnote3">3</a>: **Tail call optimization** It is a programming feature. In general, the frame stack may become very large after a large number of recursive function call. Language with tail call optimisation reuse the same stack frame for their entire sequence of recursive calls. Python does not support tail call optimisation.
+  * <a name="myfootnote4">4</a>: **Curying** is a technique that transform `func(arg1, arg2, ...)` to `func1(arg1) { return func2(arg2,...); }`
+  * <a name="myfootnote5">5</a>: **Lazy evaluation** is a compiler technique that avoids running code until the result is needed.
+  * <a name="myfootnote6">6</a>: A process is **deterministic** if repetitions yield the same result every time.
 
 
 

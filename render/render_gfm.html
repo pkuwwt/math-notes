@@ -154,10 +154,10 @@ var basename = function(f) {
 	return f.replace(/\\/g,'/').replace(/.*\//, '');
 };
 var handle_external_files = function(text, md_dir) {
-	console.log(md_dir);
+	//console.log(md_dir);
 	if(!md_dir.endsWith("/")) md_dir = md_dir + '/';
 	text = text.replace(/\[[^\[\]]*\]\([^\(\)]*\)/g, function(match) {
-		if(match.match(/\]\((http|ftp|https):/)) return match;
+		if(match.match(/\]\((http|ftp|https|#)/)) return match;
 		return match.replace(/\]\(/, '](' + md_dir);
 			});
 	text = text.replace(/(src|href)="[^"]*"/g, function(match) {
