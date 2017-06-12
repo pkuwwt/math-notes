@@ -74,14 +74,13 @@ var handle_inline_math = function(html) {
 	var obj = $("<div>" + html + "</div>");
 	obj.find("code:not([class])").replaceWith(function() { 
 		var tex = $(this).text(); 
-		if(tex.length==0) return tex;
-		if(tex[0]=='$' && tex[tex.length-1]=='$') {
+		if(tex.length>=2 && tex[0]=='$' && tex[tex.length-1]=='$') {
 			tex = tex.substr(1,tex.length-2);
 			tex = replace_tex_alias(tex);
 			return katex.renderToString(tex, {displayMode: false}); 
 		}
 		else {
-			return tex;
+			return $(this);
 		}
 	}); 
 	return obj.html();
