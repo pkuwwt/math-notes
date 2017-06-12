@@ -176,7 +176,7 @@ if len(heights)>0:
 	def strip_punctuation_from_name(band):
 		return assoc(band, 'name', band['name'].replace('.', ''))
 	def capitalize_names(band):
-		return assoc(band, 'name, band['name'].title())
+		return assoc(band, 'name', band['name'].title())
 	def pipeline_each(data, functions):
 		return reduce(lambda a, x: map(x,a), functions, data)
 ```
