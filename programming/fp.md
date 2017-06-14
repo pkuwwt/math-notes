@@ -339,6 +339,14 @@ const person = {name: 'Tim'};
 console.log(formatName(person));
 ```
 
+### Lisp
+
+#### bind
+
+### Haskell
+
+#### Monad
+
 
 ## References
 
