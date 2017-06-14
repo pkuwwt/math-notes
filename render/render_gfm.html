@@ -48,7 +48,9 @@ var get_absolute_url = function(rel_path) {
 	var pathname = href.pathname;
 	//console.log(href.pathname);
 	var dirname = pathname.substring(0, pathname.lastIndexOf('/'));
-	var path = href.protocol + "//" + href.hostname + ":" + href.port + "/" + dirname + "/" + rel_path;
+	var port = (href.port ? (":" + href.port) : ("")) ;
+	if(dirname[0]!="/") port = port + "/";
+	var path = href.protocol + "//" + href.hostname + port + dirname + "/" + rel_path;
 	console.log(path);
 	return path;
 };
