@@ -39,7 +39,7 @@ $(\"script[type='math/tex; mode=display']\").replaceWith(function() { \n\
 </script> \n\
 "
 def get_html(head="", body="")
-	return "<!DOCTYPE html>\n<html>\n<head>\n" + head + "</head>\n<body>\n" + body + "</body>\n</html>\n" 
+	return "<!DOCTYPE html>\n<html>\n<head><meta charset=\"UTF-8\">\n" + head + "</head>\n<body>\n" + body + "</body>\n</html>\n" 
 end
 
 def render_with_mathjax(text)

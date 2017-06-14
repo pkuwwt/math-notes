@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		  <meta charset="utf-8"/>
+		  <title>Rendering Github Flavored Markdown</title>
+		  <script src="marked.min.js"></script>
+		  <link rel="stylesheet" href="katex/katex.min.css"> 
+		  <script src="katex/katex.min.js"></script> 
+		  <script src="jquery.min.js"></script> 
+		  <link rel="stylesheet" href="highlight/default.min.css">
+		  <script src="highlight/highlight.min.js"></script>
+		  <script>hljs.initHighlightingOnLoad();</script>
+		  <!--
+		  -->
+		  <script>
+marked.setOptions({
+	renderer: new marked.Renderer(),
+	gfm: true,
+	tables: true,
+	breaks: false,
+	pedantic: false,
+	sanitize: false,
+	smartLists: true,
+	smartypants: false
+});
+var tex_alias = {Ba:'mathbf{a}', Bb:'mathbf{b}', Bc:'mathbf{c}', Be: 'mathbf{e}', Bf:'mathbf{f}', Bh:'mathbf{h}', Bw:'mathbf{w}', Bx:'mathbf{x}', By:'mathbf{y}', Bz:'mathbf{z}', BX:'mathbf{X}',BY:'mathbf{Y}', BZ:'mathbf{Z}', bE:'mathbb{E}', bG:'mathbb{G}', bR:'mathbb{R}', bZ:'mathbb{Z}', cN: 'mathcal{N}'}; 
+var replace_tex_alias = function(text) {
+	for(var key in tex_alias) {
+		text = text.replace(new RegExp('\\\\'+key, 'g'), '\\'+tex_alias[key]);
+	}
+	return text;
+};
+var getURLParameter = function(name) {
+	  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+}
+var get_markdown_file = function() {
+	return getURLParameter("file");
+};
+var get_location = function(href) {
+	var l = document.createElement("a");
+	l.href = href;
+	return l;
+};
+var get_absolute_url = function(rel_path) {
+	if(rel_path==null) return null;
+	if(rel_path.startsWith("http") || rel_path.startsWith("ftp")) return rel_path;
+	var href = get_location(window.location.href);
+	var pathname = href.pathname;
+	//console.log(href.pathname);
+	var dirname = pathname.substring(0, pathname.lastIndexOf('/'));
+	return href.protocol + "//" + href.hostname + ":" + href.port + "/" + dirname + "/" + rel_path;
+};
+function readTextFile(file,callback)
+{
+	if(file==null) {
+		return callback("");
+	}
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                callback(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+var handle_inline_math = function(html) {
+	var obj = $("<div>" + html + "</div>");
+	obj.find("code:not([class])").replaceWith(function() { 
+		var tex = $(this).text(); 
+		if(tex.length>=2 && tex[0]=='$' && tex[tex.length-1]=='$') {
+			tex = tex.substr(1,tex.length-2);
+			tex = replace_tex_alias(tex);
+			return katex.renderToString(tex, {displayMode: false}); 
+		}
+		else {
+			return $(this);
+		}
+	}); 
+	return obj.html();
+};
+var handle_display_math = function(html) {
+	var obj = $("<div>" + html + "</div>");
+	obj.find("code[class='lang-math']").replaceWith(function() { 
+		var html = $(this).html(); 
+		html = html.replace(/amp;/g, ''); // a bug of marked: parsing & to &amp;
+		html = replace_tex_alias(html);
+		console.log(html);
+		return katex.renderToString(html.replace(/%.*/g, ''), {displayMode: true}); 
+	}); 
+	return obj.html();
+};
+var split_lines = function(text) {
+	return text.split("\n");
+};
+var merge_lines = function(lines) {
+	return lines.join("\n");
+};
+var pair_replace = function(text, begin, end, begin_repl, end_repl) {
+	var positions = [];
+	var strs = [begin, end];
+	var strs_repl = [begin_repl, end_repl];
+	var index = text.indexOf(begin, 0);
+	var startpos = index + begin.length;
+	while(index>=0 && startpos<text.length) {
+		positions.push(index);
+		startpos = index + begin.length;
+		index = text.indexOf(strs[positions.length%2], startpos);
+	}
+	if(positions.length%2==1) positions = positions.slice(0,positions.length-1);
+	if(positions.length==0) return text;
+	var strs2 = positions.map(function(pos, index, arr) {
+		var s = strs_repl[index%2];
+		var last_end = 0;
+		if(index!=0) last_end = arr[index-1] + strs[(index-1)%2].length;
+		s = text.slice(last_end, pos) + s;
+		return s;
+	});
+	var out = strs2.join('') + text.substr(positions[positions.length-1] + end.length);
+	return out;
+};
+String.prototype.replaceFirstWithEndPos = function(search, replacement, startpos) {
+	var target = this.slice(startpos);
+	var match = target.match(search);
+	if(match.length==0) return [this, -1];
+	var s = this.slice(0,match.index) + replacement + this.slice(match.index+match[0].length);
+	return [s,match.index+replacement.length];
+};
+var handle_katex_synatx = function(text) {
+	lines = split_lines(text);
+	var count = 0;
+	text = lines.map(function(line){
+		if(line=='$$') {
+			count = count + 1;
+			if(count%2==1) return '```math';
+			else return '```';
+		}
+		return pair_replace(line, '$$', '$$', '`$', '$`');
+	}).join('\n');
+	//console.log(text);
+	return text;
+};
+var dirname = function(f) {
+	if(f.indexOf('/')==-1) return './';
+	return f.replace(/\\/g, '/').replace(/\/[^\/]*$/, '');
+};
+var basename = function(f) {
+	return f.replace(/\\/g,'/').replace(/.*\//, '');
+};
+var handle_external_files = function(text, md_dir) {
+	//console.log(md_dir);
+	if(!md_dir.endsWith("/")) md_dir = md_dir + '/';
+	text = text.replace(/\[[^\[\]]*\]\([^\(\)]*\)/g, function(match) {
+		if(match.match(/\]\((http|ftp|https|#)/)) return match;
+		return match.replace(/\]\(/, '](' + md_dir);
+			});
+	text = text.replace(/(src|href)="[^"]*"/g, function(match) {
+		if(match.match(/="(http|ftp|https):/)) return match;
+		return match.replace(/="/, "=\"" + md_dir);
+		});
+	return text;
+};
+var main = function(callback) {
+	var file = get_markdown_file();
+	var url = get_absolute_url(file);
+	readTextFile(url, function(text) {
+		if(text=="") return callback("");
+		text = handle_katex_synatx(text);
+		text = handle_external_files(text, dirname(file));
+		var html = marked(text);
+		html = handle_inline_math(html);
+		html = handle_display_math(html);
+		//console.log('---', html);
+		callback(html);
+	});
+};
+		  </script>
+	</head>
+	<body>
+		<div id="content"></div>
+		<script>
+			main(function(html) { document.getElementById('content').innerHTML = html; });
+		</script>
+	</body>
+</html>
+
