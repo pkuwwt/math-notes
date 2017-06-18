@@ -53,6 +53,80 @@
     * What: transfer which part of knowledge, then HOW to transfer
     * When: avoid _negative transfer_ for unrelated domains
   * categorization: inductive/transductive/unsupervised transfer learning
+    * inductive transfer learning: target task $$\neq$$ source task
+	  * a lot of labels in source domain, similar to multi-task learning
+	  * no labels in source domain, similar to self-taught learning
+	* transductive transfer learning: same task, different domains. No labels in target domain, a lot of labels in source domain
+	  * $$\mathcal{X}_S\neq\mathcal{X}_T$$
+	  * $$\mathcal{X}_S=\mathcal{X}_T, P(X_S)\neq P(X_T)$$, similar to domain adaption, sample selection and co-variate shift
+    * similar to inductive transfer learning, but no labels in both domains
+
+<table>
+<caption>Various Transfer Learning Settings</caption>
+<tr>
+	<th colspan="2">Learning Settings</th>
+	<th>Source and Target Domains</th>
+	<th>Source and Target Tasks</th>
+</tr>
+<tr>
+	<td colspan="2">Traditional ML</td>
+	<td>same</td>
+	<td>same</td>
+</tr>
+<tr>
+	<td rowspan="3">Transfer Learning</td>
+	<td class="noborder">Inductive</td>
+	<td>same</td>
+	<td>different but related</td>
+</tr>
+<tr>
+	<td class="noborder">Unsupervised</td>
+	<td>different but related</td>
+	<td>different but related</td>
+</tr>
+<tr>
+	<td>Transductive</td>
+	<td>different but related</td>
+	<td>same</td>
+</tr>
+</table>
+
+<table>
+<caption>Different Settings of Transfer Learning</caption>
+<tr>
+	<th>Transfer Learning Settings</th>
+	<th>Related Areas</th>
+	<th>Source Domain Labels</th>
+	<th>Target Domain Labels</th>
+	<th>Tasks</th>
+</tr>
+<tr>
+	<td rowspan="2">Inductive</td>
+	<td>Multi-task Learning</td>
+	<td>Available</td>
+	<td>Available</td>
+	<td rowspan="3">Regression</br>Classification</td>
+</tr>
+<tr>
+	<td>Self-taught Learning</td>
+	<td>Unavailable</td>
+	<td>Available</td>
+</tr>
+<tr>
+	<td>Transductive</td>
+	<td>Domain Adaption, Sample Selection Bias, Co-variate Shift</td>
+	<td>Available</td>
+	<td>Unavailable</td>
+</tr>
+<tr>
+	<td>Unsupervised</td>
+	<td></td>
+	<td>Unavailable</td>
+	<td>Unavailable</td>
+	<td>Clustering</br>Dimensionality</br>Reduction</td>
+</tr>
+</table>
+
 
 ## Inductive Transfer Learning
 

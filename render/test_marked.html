@@ -4,12 +4,25 @@
 		  <meta charset="utf-8"/>
 		    <title>Marked in the browser</title>
 			  <script src="marked.min.js"></script>
+			  <script src="jquery.min.js"></script> 
+		  <script>
+marked.setOptions({
+	renderer: new marked.Renderer(),
+	gfm: true,
+	tables: true,
+	breaks: false,
+	pedantic: false,
+	sanitize: false,
+	smartLists: true,
+	smartypants: false
+});
+		  </script>
 	</head>
 	<body>
-		  <div id="content"></div>
-		    <script>
-    document.getElementById('content').innerHTML =
-	      marked('# [`Marked`][marked] in browser\n\nRendered by **marked**.\n\n  [marked]: https://github.com/chjj/marked');
-		    </script>
+		<div id="content"></div>
+		<script>
+document.getElementById('content').innerHTML =
+marked('# [`Marked`][marked] in browser\n\nRendered by **marked**.\n\n  [marked]: https://github.com/chjj/marked\n\n| A | B |\n|-------|------|\n| C | D |\n');
+		</script>
 	</body>
 </html>
