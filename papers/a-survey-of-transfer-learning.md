@@ -127,6 +127,7 @@
 </tr>
 </table>
 
+Table: Different Approaches to Transfer Learning
 | Transfer Learning Approaches | Brief Description |
 |:----------------------------:|:------------------|
 | Instance-transfer | To re-weight some labeled data in the source domain for use in the target domain |
@@ -134,8 +135,9 @@
 | Parameter-transfer | Discover shared parameters or priors between src and target domain models |
 | Relational-knowledge-transfer | Build mapping of relational knowledge between src and target domain. Both domains are relational domains and i.i.d assumption is relaxed in each domain |
 
+Table: Different Approaches Used in Different Settings
 | | Inductive | Transductive | Unsupervised |
-|:--|: ---------------------:|:------------:|
+|:--: |:---------------------:|:------------:|
 | Instance-transfer | X | X | |
 | Feature-repr-transfer | X | X | X |
 | Parameter-transfer | X | | |
@@ -144,6 +146,8 @@
 ![](transfer-learning.png)
 
 ## Inductive Transfer Learning
+
+**Definition** (Inductinve Transfer Learning) Given a source Domain $$\mathcal{D}_S$$ and a learning task $$\mathcal{T}_S$$, a target domain $$\mathcal{D}_T$$ and a learning task $$\mathcal{T}_T$$, inductive transfer learning aims to help improve the learning of the target predictive function $$f_T(\cdot)$$ in $$\mathcal{D}_T$$ using the knowledge in $$\mathcal{D}_S$$ and $$\mathcal{T}_S$$, where $$\mathcal{T}_S\neq\mathcal{T}_T$$.
 
 ### Transferring Knowledge of Instances
 
@@ -155,11 +159,15 @@
 
 ## Transductive Transferring Learning
 
+**Definition** (Transductive Transfer Learning) Given $$\mathcal{D}_S$$, $$\mathcal{T}_S$$, $$\mathcal{D}_T$$ and $$\mathcal{T}_T$$, transductive transfer learning aims to improve the learning of the target predictive function $$f_T(\cdot)$$ in $$\mathcal{D}_T$$ using the knowledge in $$\mathcal{D}_S$$ and $$\mathcal{T}_S$$, where $$\mathcal{D}_S\neq\mathcal{D}_T$$ and $$\mathcal{T}_S=\mathcal{T}_T$$. In addition, some unlabeled target domain data must be available at training time.
+
 ### Transferring the Knowledge of Instances
 
 ### Transferring Knowledge of Feature Representations
 
 ## Unsupervised Transfer Learning
+
+**Definition** (Unsupervised Transfer Learning) Given $$\mathcal{D}_S$$, $$\mathcal{T}_S$$, $$\mathcal{D}_T$$ and $$\mathcal{T}_T$$, transductive transfer learning aims to improve the learning of the target predictive function $$f_T(\cdot)$$ in $$\mathcal{D}_T$$ using the knowledge in $$\mathcal{D}_S$$ and $$\mathcal{T}_S$$, where $$\mathcal{T}_S\neq\mathcal{T}_T$$ and $$\mathcal{Y}_S$$ and $$\mathcal{Y}_T$$ are not observable.
 
 ## Transfer Bounds and Negative Transfer
 
