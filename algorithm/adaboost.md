@@ -13,7 +13,7 @@ $$
 	err_m = \frac{\sum_{i=1}^Nw_i 1(y_i\neq G_m(x_i))}{\sum_{i=1}^Nw_i}.
 $$
     (c) Compute $$\alpha_m = \log((1-err_m)/err_m)$$.
-    (d) Set $$w_i\from w_i\cdot\exp[\alpha_m\cdot 1(y_i\neq G_m(x_i))],\,i=1,2,3\cdots,N$$.
+    (d) Set $$w_i\gets w_i\cdot\exp[\alpha_m\cdot 1(y_i\neq G_m(x_i))],\,i=1,2,3\cdots,N$$.
   3. Output $$G(x)=\mathop{sign}\left[\sum_{m=1}^M\alpha G_m(x)\right]$$.
 
 ## Reference
