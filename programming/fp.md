@@ -345,6 +345,56 @@ console.log(formatName(person));
 
 ### Haskell
 
+#### Immutability
+```haskell
+let a = 2
+let f x = a + x
+let a = 3
+f (-2)
+```
+
+#### Pure functions
+```haskell
+circumference :: Float -> Float
+circumference r = 2 * pi * r
+```
+
+#### First-class functions
+
+#### Polymorphism
+	ghci> :t 1
+	1 :: Num t => t
+	ghci> :t length
+	length :: Foldable t => t a -> int
+
+#### High-order functions
+
+```haskell
+applyTwice :: (a -> a) -> a -> a
+applyTwice f x = f (f x)
+```
+
+#### Chaining
+
+#### Composition
+
+#### Currying
+
+	ghci> :t max
+	max :: Ord a => a -> a -> a
+	ghci> max 4 5
+	5
+	ghci> (max 4) 5
+	5
+	ghci> :t (max 4)
+	(max 4) :: (Ord a, Num a) => a -> a
+
+#### Monads
+
+#### Functors
+
+#### Friends
+
 #### Monad
 
 
