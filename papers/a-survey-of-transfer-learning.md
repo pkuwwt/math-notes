@@ -128,6 +128,7 @@
 </table>
 
 Table: Different Approaches to Transfer Learning
+
 | Transfer Learning Approaches | Brief Description |
 |:----------------------------:|:------------------|
 | Instance-transfer | To re-weight some labeled data in the source domain for use in the target domain |
@@ -136,6 +137,7 @@ Table: Different Approaches to Transfer Learning
 | Relational-knowledge-transfer | Build mapping of relational knowledge between src and target domain. Both domains are relational domains and i.i.d assumption is relaxed in each domain |
 
 Table: Different Approaches Used in Different Settings
+
 | | Inductive | Transductive | Unsupervised |
 |:--: |:---------------------:|:------------:|
 | Instance-transfer | X | X | |
