@@ -154,6 +154,9 @@ Table: Different Approaches Used in Different Settings
 ### Transferring Knowledge of Instances
 
   * TrAdaBoost: source and target domains have the same features and labels, only differ in distributions. Re-weight to encourage "good" source data, reduce "bad" source data.
+  * remove "misleading" training data: based on difference between $$P(y_T\mid x_T)$$ and $$P(y_S\mid x_S)$$.
+  * label data in target domain: with the help of source domain
+  * source domain data + SVM
 
 ### Transferring Knowledge of Feature Representations
 
