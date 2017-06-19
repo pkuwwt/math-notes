@@ -139,7 +139,7 @@ Table: Different Approaches to Transfer Learning
 Table: Different Approaches Used in Different Settings
 
 | | Inductive | Transductive | Unsupervised |
-|:--: |:---------------------:|:------------:|
+|:--:|:--:|:---------------------:|:------------:|
 | Instance-transfer | X | X | |
 | Feature-repr-transfer | X | X | X |
 | Parameter-transfer | X | | |
@@ -152,6 +152,8 @@ Table: Different Approaches Used in Different Settings
 **Definition** (Inductinve Transfer Learning) Given a source Domain $$\mathcal{D}_S$$ and a learning task $$\mathcal{T}_S$$, a target domain $$\mathcal{D}_T$$ and a learning task $$\mathcal{T}_T$$, inductive transfer learning aims to help improve the learning of the target predictive function $$f_T(\cdot)$$ in $$\mathcal{D}_T$$ using the knowledge in $$\mathcal{D}_S$$ and $$\mathcal{T}_S$$, where $$\mathcal{T}_S\neq\mathcal{T}_T$$.
 
 ### Transferring Knowledge of Instances
+
+  * TrAdaBoost: source and target domains have the same features and labels, only differ in distributions. Re-weight to encourage "good" source data, reduce "bad" source data.
 
 ### Transferring Knowledge of Feature Representations
 
