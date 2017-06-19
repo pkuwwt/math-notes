@@ -59,7 +59,7 @@
 	* transductive transfer learning: same task, different domains. No labels in target domain, a lot of labels in source domain
 	  * $$\mathcal{X}_S\neq\mathcal{X}_T$$
 	  * $$\mathcal{X}_S=\mathcal{X}_T, P(X_S)\neq P(X_T)$$, similar to domain adaption, sample selection and co-variate shift
-    * similar to inductive transfer learning, but no labels in both domains
+    * unsupervised transfer learning: similar to inductive transfer learning, but no labels in both domains
 
 <table>
 <caption>Various Transfer Learning Settings</caption>
@@ -127,6 +127,21 @@
 </tr>
 </table>
 
+| Transfer Learning Approaches | Brief Description |
+|:----------------------------:|:------------------|
+| Instance-transfer | To re-weight some labeled data in the source domain for use in the target domain |
+| Feature-representation-transfer | Find a "good" feature representation that reduces diff(src, target domain) and err(classification, regression) | 
+| Parameter-transfer | Discover shared parameters or priors between src and target domain models |
+| Relational-knowledge-transfer | Build mapping of relational knowledge between src and target domain. Both domains are relational domains and i.i.d assumption is relaxed in each domain |
+
+| | Inductive | Transductive | Unsupervised |
+|:--|: ---------------------:|:------------:|
+| Instance-transfer | X | X | |
+| Feature-repr-transfer | X | X | X |
+| Parameter-transfer | X | | |
+| Rel-knowledge-transfer | X | | |
+
+![](transfer-learning.png)
 
 ## Inductive Transfer Learning
 
